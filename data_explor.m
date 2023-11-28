@@ -1,3 +1,5 @@
+%% Data Exploration & Analysis
+% William Baumchen
 close all;
 clear;
 clc
@@ -20,27 +22,34 @@ title('Correlation of Variables')
 
 % Observe variance in quality with respect to each of the possible sets of
 % variables
-% WARNING: Not scaling correctly
-fig = figure(20);
-for i = 1:n-1
-    for j = 1:n-1
-        subplot(11,11,((i-1)*11 + j));
-        if j <= i
-            k=3;
-            whitea = white(:,i);
-            whiteb = white(:,j);
-            kiwhit = whitea(white(:,12)==k);
-            kjwhit = whiteb(white(:,12)==k);
-            scatter(kiwhit,kjwhit);
-            hold on
-            for k = 4:9
+% WARNING: Not scaling correctly - to use, set varcerUSE =1
+varcerUSE = 0;
+if varcerUSE == 1
+    fig = figure(20);
+    for i = 1:n-1
+        for j = 1:n-1
+            subplot(11,11,((i-1)*11 + j));
+            if j <= i
+                k=3;
                 whitea = white(:,i);
                 whiteb = white(:,j);
                 kiwhit = whitea(white(:,12)==k);
                 kjwhit = whiteb(white(:,12)==k);
                 scatter(kiwhit,kjwhit);
+                xlabel(stringg(i))
+                ylabel(stringg(j))
+                hold on
+                for k = 4:9
+                    whitea = white(:,i);
+                    whiteb = white(:,j);
+                    kiwhit = whitea(white(:,12)==k);
+                    kjwhit = whiteb(white(:,12)==k);
+                    scatter(kiwhit,kjwhit);
+                    xlabel(stringg(i))
+                    ylabel(stringg(j))
+                end
+                hold off
             end
-            hold off
         end
     end
 end
@@ -48,7 +57,7 @@ end
 %% PCA
 % Conduct Principle Component Analysis on the white wine data
 [coeff,scoreTrain,~,~,explained,mu] = pca(white(:,1:11));
-% Find range of components giving 90% accuracy:
+% Find range of components giving >95% accuracy:
 explained
 % As can be seen, two components are sufficient, as the first two are ~98%
 % responsible for variation in data
